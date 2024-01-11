@@ -5,27 +5,33 @@
 #   run your functions.
 #   spinner.stop
 
+# Suppressed Variables
+if (( 1<2 )); then
 # Colors
-if (( 2>1 )); then
 Clear="\033[0m";
 Blue="\033[1;34m";
 Genta="\033[1;35m";
 Green="\033[1;32m";
 Red="\033[1;31m";
 Yelo="\033[1;33m";
-fi
-
-# Global Variables
-if (( 2>1 )); then
-icon="● ";
-success="SUCCESS";
-error="FAILED";
+Gora="\033[1;97m"
+# BG Colors.
+BGRed="\033[1;41m";
+BGGreen="\033[1;42m";
+BGYelo="\033[1;43m";
+# Status Colors.
+StatusRed="${BGRed}${Gora}";
+StatusGreen="${BGGreen}${Gora}";
+StatusYelo="${BGYelo}${Gora}";
+CircleIcon="● ";
+Success="SUCCESS";
+Failure="FAILED";
 list=(
-  "${Blue}${icon}${Green}${icon}${Yelo}${icon}${Red}${icon}${Genta}${icon}    "
-  " ${Green}${icon}${Yelo}${icon}${Red}${icon}${Genta}${icon}${Blue}${icon}   "
-  "  ${Red}${icon}${Genta}${icon}${Yelo}${icon}${Blue}${icon}${Green}${icon}  "
-  "   ${Genta}${icon}${Blue}${icon}${Green}${Yelo}${icon}${icon}${Red}${icon} "
-  "    ${Blue}${icon}${Green}${icon}${Red}${icon}${Yelo}${icon}${Genta}${icon}"
+  "${Blue}${CircleIcon}${Green}${CircleIcon}${Yelo}${CircleIcon}${Red}${CircleIcon}${Genta}${CircleIcon}    "
+  " ${Green}${CircleIcon}${Yelo}${CircleIcon}${Red}${CircleIcon}${Genta}${CircleIcon}${Blue}${CircleIcon}   "
+  "  ${Red}${CircleIcon}${Genta}${CircleIcon}${Yelo}${CircleIcon}${Blue}${CircleIcon}${Green}${CircleIcon}  "
+  "   ${Genta}${CircleIcon}${Blue}${CircleIcon}${Green}${Yelo}${CircleIcon}${CircleIcon}${Red}${CircleIcon} "
+  "    ${Blue}${CircleIcon}${Green}${CircleIcon}${Red}${CircleIcon}${Yelo}${CircleIcon}${Genta}${CircleIcon}"
 )
 fi
 
@@ -57,14 +63,13 @@ _spinner(){
        exit 1
      fi
      kill ${3} > /dev/null 2>&1
-     echo -en "\b${Clear}  -> ["
+     echo -en "\b${Clear} ➙ "
      if [[ $2 -eq 0 ]]; then
-       echo -en " ${Green}${success}${Clear} "
+       echo -e "${StatusGreen} ${Success} ${Clear}"
      else
-       echo -en " ${Red}${error}${Clear} "
+       echo -e "${StatusRed} ${Failure} ${Clear}"
        exit 1;
      fi
-     echo -e "${Clear}]"
     ;;
     *) 
       echo "error: invalid args, try again with {start/stop}"
@@ -86,7 +91,6 @@ spinner.start(){
       return 1;
   fi
   local uri="${1} '${Green}${2}${Clear}'..."
-  # required cmds.
   spinner.setCursor off
   _spinner start "${uri}" &
   _spinner_pid="${!}"

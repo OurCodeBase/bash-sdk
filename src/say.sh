@@ -80,7 +80,7 @@ _status(){
     else local String+="${Uri} ";
     fi
   done
-  echo -e "${StatusColor} INFO ${Clear} > ${String}";
+  echo -e "${StatusColor} INFO ${Clear} ➙ ${String}";
   return 0;
 }
 
@@ -108,9 +108,9 @@ say.success(){
 #   status (int) > takes exit code.
 say.checkStatus(){
   if [[ "${1}" == 0 ]]; then
-    echo -e " -> ${StatusGreen} SUCCESS ${Clear}";
+    echo -e " ➙ ${StatusGreen} SUCCESS ${Clear}";
   else
-    echo -e " -> ${StatusRed} FAILED ${Clear}";
+    echo -e " ➙ ${StatusRed} FAILED ${Clear}";
     exit 1;
   fi
 }

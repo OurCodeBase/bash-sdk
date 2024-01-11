@@ -24,7 +24,7 @@ source "${Dir}"/os.sh
 #   install (str) > install to get package installed size.
 #   package (str) > takes package (eg: python,nodejs).
 # Returns:
-#   size (int) > Gives you size in MBs.
+#   size (int) > Gives you size in MiBs.
 # Usage:
 #   pkg.size(dnload,package) > Gives you package file size.
 #   pkg.size(install,package) > Gives you package installed size.
@@ -35,14 +35,14 @@ pkg.size(){
     return 1;
   fi
   case "${1}" in
-    'dnload') local SizeVar="$(apt show "${2}" 2> /dev/null | grep 'Download-Size:')";;
-    'install') local SizeVar="$(apt show "${2}" 2> /dev/null | grep 'Installed-Size:')";;
+    'dnload') local SizeSource="$(apt show "${2}" 2> /dev/null | grep 'Download-Size:')";;
+    'install') local SizeSource="$(apt show "${2}" 2> /dev/null | grep 'Installed-Size:')";;
   esac
-  local Size="$(echo "${SizeVar}" | awk '{print $2}')";
-  local SizeUnit="$(echo "${SizeVar}" | awk '{print $3}')";
-  # converting decimals to integers.
+  local Size="$(echo "${SizeSource}" | awk '{print $2}')";
+  local SizeUnit="$(echo "${SizeSource}" | awk '{print $3}')";
+  # convert decimals to integers.
   local Size="${Size%%.*}";
-  # checking unit of package.
+  # check unit of package.
   case "${SizeUnit}" in
     'MB') echo "${Size}";;
     'kB') echo "$(( Size/1024 ))";;
@@ -57,22 +57,20 @@ pkg.size(){
 # Args:
 #   pkgs (array) > takes array of packages.
 pkg.chart(){
-  inspect.ScreenSize '96' '12';
+  inspect.ScreenSize '62' '12';
   # this takes all packages as arg.
   local ARGs=("${@}");
   # total content file size of all packages.
   local PuraSizeDL=0;
   # total installed size of all packages.
   local PuraSizeIN=0;
+  # turn off cursor.
   setCursor off;
-  echo;
-  say.success "📦 Getting Information Packages";
-  echo -e "
-    ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-    ┃                                 INFORMATION PACKAGES                                ┃
-    ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
-    ┃      PACKAGE NAME              VERSION             DOWNLOAD           INSTALLED     ┃
-    ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛";
+    echo -e "
+  ╭─ Packages ─────────────────────────────────────────────╮";
+    echo -e "  │                                                        │";
+    printf "  │  %-25s %-10s %-7s %-7s  │\n" 'Package' 'Version' 'DLSize' 'INSize';
+    printf "  │  %-25s %-10s %-7s %-7s  │\n" '─────────────────────────' '──────────' '───────' '───────';
   for ARG in "${ARGs[@]}"
   do
     # declare database variable.
@@ -85,18 +83,21 @@ pkg.chart(){
     local PackageSizeDL="$(pkg.size 'dnload' "${ARG}")";
     # declare package installed size variable.
     local PackageSizeIN="$(pkg.size 'install' "${ARG}")";
-      printf  "    ┃      ${Green}%-13s${Clear}          ${Yelo}%10s${Clear}              ${Yelo}%-4s${Clear} %-2s             ${Yelo}%-4s${Clear} %-2s     ┃\n" "${PackageVar}" "${PackageVersion}" "${PackageSizeDL}" "MB" "${PackageSizeIN}" "MB";
-      echo -e "    ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛";
+      printf "  │  ${Green}%-25s${Clear} ${Yelo}%-10s${Clear} ${Yelo}%3s${Clear} %-3s ${Yelo}%3s${Clear} %-3s  │\n" "${PackageVar}" "${PackageVersion}" "${PackageSizeDL}" 'MiB' "${PackageSizeIN}" 'MiB';
     # Adding dl sizes of all packages.
     local PuraSizeDL=$(( PuraSizeDL + PackageSizeDL ));
     # Adding ins sizes of all packages.
     local PuraSizeIN=$(( PuraSizeIN + PackageSizeIN ));
   done
-    # print total data.
-    printf    "    ┃     [ ${Yelo}%5s${Clear} ]  ─────────────────────────────────> ${Yelo}%6s${Clear} %-2s           ${Yelo}%6s${Clear} %-2s     ┃" "TOTAL" "${PuraSizeDL}" "MB" "${PuraSizeIN}" "MB"
-    echo -e "\n    ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛";
-  echo;
+    echo -e "  │                                                        │";
+    echo -e "  ╰────────────────────────────────────────────────────────╯\n";
+    echo -e "  ╭─ TOTAL ────────────────────╮";
+  printf "  │  %14s: ${Green}%4s${Clear} %3s  │\n" "Download Size" "${PuraSizeDL}" 'MiB';
+  printf "  │  %14s: ${Yelo}%4s${Clear} %3s  │\n" "Installed Size" "${PuraSizeIN}" 'MiB';
+  echo -e "  ╰────────────────────────────╯";
+  # turn on cursor.
   setCursor on;
+  # return function.
   return;
 }
 
