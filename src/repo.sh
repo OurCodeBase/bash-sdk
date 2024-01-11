@@ -26,8 +26,7 @@ repo.size(){
   inspect.is_func curl;
   local Api="$(echo "${1}" | awk '{print $1}')";
   local UriSize=$(curl "https://api.github.com/repos/${Api}" 2> /dev/null | grep size | head -1 | tr -dc '[:digit:]');
-  local UriSize=$(( UriSize/1024 ));
-  echo "${UriSize} MB";
+  echo $(( UriSize/1024 ));
   return;
 }
 
@@ -50,7 +49,7 @@ repo.chart(){
   for ARG in "${ARGs[@]}"
   do
     local Api="$(echo "${ARG}" | awk '{print $1}')";
-    local UriSize="$(repo.size "${ARG}" | awk '{print $1}')";
+    local UriSize="$(repo.size "${ARG}")";
     printf  "    ┃      ${Green}%-36s${Clear}       ${Yelo}%8s${Clear}           ┃\n" "${Api}" "${UriSize}";
     echo -e "    ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛";
   done

@@ -17,70 +17,37 @@ source "${Dir}"/os.sh
 # source os.sh
 # source ask.sh
 
-# pkg.sizeDL(pkg) -> str
-#   Used to get dl size of a package.
+# pkg.size(dnload~install,package) -> int
+#   Gives you needed size of package.
 # Args:
-#   pkg (str) > takes package as arg. (eg: python, nodejs)
+#   dnload (str) > dnload to get file size.
+#   install (str) > install to get package installed size.
+#   package (str) > takes package (eg: python,nodejs).
 # Returns:
-#   Gives you file size in MB. (eg: 30 MB)
-pkg.sizeDL(){
-  # assigning database variable.
-  local SizeDB="$(apt show "${1}" 2> /dev/null | grep Download-Size:)";
-  # assigning size variable.
-  local Size="$(echo "${SizeDB}" | awk '{print $2}')";
-  # assigning SizeUnit variable.
-  local SizeUnit="$(echo "${SizeDB}" | awk '{print $3}')";
-  # checking unit of package.
-  if [[ "${SizeUnit}" == "kB" ]]; then
-    # converting decimals to integers.
-    local Size="${Size%%.*}";
-    # gives size in MB.
-    echo "$(( Size/1024 )) MB";
-  elif [[ "${SizeUnit}" == "B" ]]; then
-    # converting decimals to integers.
-    local Size="${Size%%.*}";
-    # gives size in MB.
-    echo "$(( Size/1048576 )) MB";
-  else
-    # converting decimals to integers.
-    local Size="${Size%%.*}"
-    # gives already MB packages size.
-    echo "${Size} ${SizeUnit}";
+#   size (int) > Gives you size in MBs.
+# Usage:
+#   pkg.size(dnload,package) > Gives you package file size.
+#   pkg.size(install,package) > Gives you package installed size.
+pkg.size(){
+  # checking args given or not.
+  if [[ ! ${#} -eq 2 ]]; then
+    echo "error: 'missing args'";
+    return 1;
   fi
-  # return function.
-  return;
-}
-
-# pkg.sizeIN(pkg) -> str
-#   Used to get in size of a package.
-# Args:
-#   pkg (str) > takes package as arg. (eg: python, nodejs)
-# Returns:
-#   Gives you file size in MB. (eg: 30 MB)
-pkg.sizeIN(){
-  # assigning database variable.
-  local SizeDB="$(apt show "${1}" 2> /dev/null | grep Installed-Size:)";
-  # assigning size variable.
-  local Size="$(echo "${SizeDB}" | awk '{print $2}')";
-  # assigning SizeUnit variable.
-  local SizeUnit="$(echo "${SizeDB}" | awk '{print $3}')";
+  case "${1}" in
+    'dnload') local SizeVar="$(apt show "${2}" 2> /dev/null | grep 'Download-Size:')";;
+    'install') local SizeVar="$(apt show "${2}" 2> /dev/null | grep 'Installed-Size:')";;
+  esac
+  local Size="$(echo "${SizeVar}" | awk '{print $2}')";
+  local SizeUnit="$(echo "${SizeVar}" | awk '{print $3}')";
+  # converting decimals to integers.
+  local Size="${Size%%.*}";
   # checking unit of package.
-  if [[ "${SizeUnit}" == "kB" ]]; then
-    # converting decimals to integers.
-    local Size="${Size%%.*}";
-    # gives size in kB.
-    echo "$(( Size/1048576 )) MB";
-  elif [[ "${SizeUnit}" == "B" ]]; then
-    # converting decimals to integers.
-    local Size="${Size%%.*}";
-    # gives size in kB.
-    echo "$(( Size/2048 )) MB";
-  else
-    # converting decimals to integers.
-    local Size="${Size%%.*}"
-    # gives already kB packages size.
-    echo "${Size} ${SizeUnit}";
-  fi
+  case "${SizeUnit}" in
+    'MB') echo "${Size}";;
+    'kB') echo "$(( Size/1024 ))";;
+    'B') echo "$(( Size/1048576 ))";;
+  esac 
   # return function.
   return;
 }
@@ -90,13 +57,13 @@ pkg.sizeIN(){
 # Args:
 #   pkgs (array) > takes array of packages.
 pkg.chart(){
-  inspect.ScreenSize 96 12;
+  inspect.ScreenSize '96' '12';
   # this takes all packages as arg.
   local ARGs=("${@}");
-  # total download size of all packages.
-  local UriSizeDL=0;
+  # total content file size of all packages.
+  local PuraSizeDL=0;
   # total installed size of all packages.
-  local UriSizeIN=0;
+  local PuraSizeIN=0;
   setCursor off;
   echo;
   say.success "📦 Getting Information Packages";
@@ -108,25 +75,25 @@ pkg.chart(){
     ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛";
   for ARG in "${ARGs[@]}"
   do
-    # assigning database variable.
-    local Uri="$(apt show "${ARG}" 2> /dev/null)";
-    # assign pkg name variable.
-    local Id="$(echo "${Uri}" | grep Package: | awk '{print $2}')";
-    # assign pkg version variable.
-    local Build="$(echo "${Uri}" | grep Version: | awk '{print $2}')";
-    # assign pkg download size variable.
-    local SizeDL="$(pkg.sizeDL "${ARG}" | awk '{print $1}')";
-    # assign pkg installed size variable.
-    local SizeIN="$(pkg.sizeIN "${ARG}" | awk '{print $1}')";
-      printf  "    ┃      ${Green}%-13s${Clear}          ${Yelo}%10s${Clear}              ${Yelo}%-4s${Clear} %-2s             ${Yelo}%-4s${Clear} %-2s     ┃\n" "${Id}" "${Build}" "${SizeDL}" "MB" "${SizeIN}" "MB";
+    # declare database variable.
+    local PackageSource="$(apt show "${ARG}" 2> /dev/null)";
+    # declare package variable.
+    local PackageVar="$(echo "${PackageSource}" | grep 'Package:' | awk '{print $2}')";
+    # declare package version variable.
+    local PackageVersion="$(echo "${PackageSource}" | grep 'Version:' | awk '{print $2}' | awk -F'-' '{print $1}')";
+    # declare package file size variable.
+    local PackageSizeDL="$(pkg.size 'dnload' "${ARG}")";
+    # declare package installed size variable.
+    local PackageSizeIN="$(pkg.size 'install' "${ARG}")";
+      printf  "    ┃      ${Green}%-13s${Clear}          ${Yelo}%10s${Clear}              ${Yelo}%-4s${Clear} %-2s             ${Yelo}%-4s${Clear} %-2s     ┃\n" "${PackageVar}" "${PackageVersion}" "${PackageSizeDL}" "MB" "${PackageSizeIN}" "MB";
       echo -e "    ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛";
     # Adding dl sizes of all packages.
-    local UriSizeDL=$(( UriSizeDL + SizeDL ));
+    local PuraSizeDL=$(( PuraSizeDL + PackageSizeDL ));
     # Adding ins sizes of all packages.
-    local UriSizeIN=$(( UriSizeIN + SizeIN ));
+    local PuraSizeIN=$(( PuraSizeIN + PackageSizeIN ));
   done
     # print total data.
-    printf    "    ┃     [ ${Yelo}%5s${Clear} ]  ─────────────────────────────────> ${Yelo}%6s${Clear} %-2s           ${Yelo}%6s${Clear} %-2s     ┃" "TOTAL" "${UriSizeDL}" "MB" "${UriSizeIN}" "MB"
+    printf    "    ┃     [ ${Yelo}%5s${Clear} ]  ─────────────────────────────────> ${Yelo}%6s${Clear} %-2s           ${Yelo}%6s${Clear} %-2s     ┃" "TOTAL" "${PuraSizeDL}" "MB" "${PuraSizeIN}" "MB"
     echo -e "\n    ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛";
   echo;
   setCursor on;
@@ -140,22 +107,20 @@ pkg.chart(){
 pkg.install(){
   # function starts here.
   local ARGs=("${@}");
-  # printing chart.
+  # execution chart.
   pkg.chart "${ARGs[@]}";
-  # required permission.
-  if ask.case "Install Packages"; then
-    for APP in "${ARGs[@]}"
+  # request permission.
+  if ask.case 'Install Packages'; then
+    for ARG in "${ARGs[@]}"
     do
-      spinner.start "Installing" "${APP}";
-      # started installing.
+      spinner.start 'Installing' "${ARG}";
+      # started installation.
       if os.is_termux; then
-        apt-get install -qq "${APP}" > /dev/null;
-      elif os.is_shell.zsh && os.is_userland; then
-        apt-get install -qq "${APP}" > /dev/null;
-      elif os.is_userland; then
-        sudo apt-get install -qq "${APP}" > /dev/null;
+        apt-get install -qq "${ARG}" > /dev/null;
+      elif os.is_shell.zsh; then
+        apt-get install -qq "${ARG}" > /dev/null;
       else
-        sudo apt-get install -qq "${APP}" > /dev/null;
+        sudo apt-get install -qq "${ARG}" > /dev/null;
       fi
       # stopped installation.
       spinner.stop;
