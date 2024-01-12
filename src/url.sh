@@ -18,17 +18,17 @@ source "${Dir}"/inspect.sh
 # source inspect.sh
 
 # url.contentSize(url) -> int
-#   Gives you size of content file in MBs.
+#   Gives you size of content file in MiB.
 # Args:
 #   url (str) > takes url as string.
 # Returns:
-#   size (int) > size in MBs (eg: 60).
+#   size (int) > size in MiB (eg: 60).
 url.contentSize(){
   # checking required functions.
   inspect.is_func 'wget';
-  local contentSizeVar="$(wget --spider "${1}" --no-check-certificate 2>&1)";
-  local contentSize="$(echo "${contentSizeVar}" | grep -i length: | awk '{print $2}')";
-  echo "$(( contentSize/1048576 ))";
+  local ContentSizeVar="$(wget --spider "${1}" --no-check-certificate 2>&1)";
+  local ContentSize="$(echo "${ContentSizeVar}" | grep -i length: | awk '{print $2}')";
+  echo "$(( ContentSize/1048576 ))";
 }
 
 # url.contentChart(urls,*paths)
@@ -37,42 +37,33 @@ url.contentSize(){
 #   urls (array) > takes one or array of urls.
 #   paths (array) > Optional: takes file paths.
 url.contentChart(){
-  inspect.ScreenSize '81' '38';
-  # taking urls and content path.
+  inspect.ScreenSize '50' '12';
   local ARGs=("${@}")
-  # size of all contents.
   local PuraSize=0;
-  # turning off cursor of terminal.
   setCursor off;
-  echo;
-  say.success "📦 Getting Information Urls";
-  echo -e "
-    ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-    ┃                           INFORMATION FILES                        ┃ 
-    ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
-    ┃            FILE NAME                          FILE SIZE            ┃
-    ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛";
+    echo -e "
+  ╭─ Content ────────────────────────────────────╮";
+    echo -e "  │                                              │";
+    printf "  │  %-34s %-7s  │\n" 'Content' 'Size';
+    printf "  │  %-34s %-7s  │\n" '──────────────────────────────────' '───────';
   for ARG in "${ARGs[@]}"
   do
-    # url of content.
     local ContentUrl="$(echo "${ARG}" | awk '{print $1}')";
-    # path of content.
     local ContentPath="$(echo "${ARG}" | awk '{print $2}')";
-    # check if path is provided.
-    [[ -z "${Path}" ]] &&
+    [[ -z "${ContentPath}" ]] &&
     local ContentVar="$(echo "${ContentUrl}" | awk -F/ '{print $NF}')" ||
     local ContentVar="$(echo "${ContentPath}" | awk -F/ '{print $NF}')";
-    # taking content size of url.
     local ContentSize="$(url.contentSize "${ContentUrl}")";
-      printf  "    ┃      ${Green}%-36s${Clear}       ${Yelo}%8s${Clear}           ┃\n" "${ContentVar}" "${ContentSize} MB";
-      echo -e "    ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛";
-    # add all size of contents.
+      printf "  │  ${Green}%-34s${Clear} ${Yelo}%3s${Clear} %-3s  │\n" "${ContentVar}" "${ContentSize}" 'MiB';
     local PuraSize=$(( PuraSize+ContentSize ))
   done
-  # print total content size.
-    printf    "    ┃     [ ${Yelo}%5s${Clear} ]  ─────────────────────────────>    ${Green}%7s${Clear} %-2s        ┃" "TOTAL" "${PuraSize} MB";
-    echo -e "\n    ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛";
+    echo -e "  │                                              │";
+    echo -e "  ╰──────────────────────────────────────────────╯\n";
+    echo -e "  ╭─ TOTAL ────────────────────╮";
+  printf "  │  %14s: ${Green}%4s${Clear} %3s  │\n" "Download Size" "${PuraSize}" 'MiB';
+  echo -e "  ╰────────────────────────────╯";
   setCursor on;
+  return 0;
 }
 
 # url.getContent(urls,*paths)
