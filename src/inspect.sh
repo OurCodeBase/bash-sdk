@@ -19,34 +19,27 @@ source "${Dir}"/os.sh
 #   cols (int) > takes columns as arg.
 #   lines (int) > takes lines as arg.
 inspect.ScreenSize(){
-  # local ARGCols=101;
   local ARGCols="${1}";
-  # local ARGRou=39;
   local ARGRou="${2}";
-  # current columns in terminal.
-  if ! screen.isSize "${ARGCols}" "${ARGRou}"; then
+  screen.isSize "${ARGCols}" "${ARGRou}" || {
     say.warn "Your Screen Size\n
     \t\tColumns: '$(screen.cols)'\n
-    \t\tLines: '$(screen.lines)'
-    ";
+    \t\tLines: '$(screen.lines)'";
     say.success "Require Screen Size\n
     \t\tColumns: '${ARGCols}'\n
-    \t\tLines: '${ARGRou}'
-    ";
+    \t\tLines: '${ARGRou}'";
     say.error "Please 'ZoomOut' your Terminal\n
     \t\tThen run again.";
     exit 1;
-  else
-    return 0;
-  fi
+  };
 }
 
 # inspect.is_func(function) -> str
 #   An extension of os.is_func.
 inspect.is_func(){
-  if ! os.is_func "${1}"; then
+  os.is_func "${1}" || {
     say.error "There is no '${1}'\n
     \t\tShould to install it on your OS.";
     exit 1;
-  fi
+  };
 }
