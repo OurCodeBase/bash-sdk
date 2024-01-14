@@ -27,18 +27,10 @@ ask.case(){
   read -p " ? [Y/n] " ARGS;
   echo;
   case "${ARGS}" in
-    y|Y)
-      return 0;
-    ;;
-    n|N)
-      say.error "Process Aborted.\n" &&
-      exit 1;
-    ;;
-    *) 
-      say.error "You have to enter only\n \t\t'Y' for Yes &\n \t\t'n' for No.\n" &&
-      exit 1;
-    ;;
-  esac 
+    y|Y) return 0;;
+    n|N) { say.error "Process Aborted.\n" && exit 1; };;
+    *) { say.error "You have to enter only\n\t\t'Y' for Yes &\n\t\t'n' for No.\n" && exit 1; };;
+  esac
 }
 
 # ask.choice(title,list) -> var
@@ -52,31 +44,18 @@ ask.choice(){
   PS3="
   ${1} > ";
   local ARGs=("${@}");
+  # leave first variable of array for title.
   local ARGs2=("${ARGs[@]:1}");
   echo;
   select ARG in "${ARGs2[@]}"
   do
-    if ! text.isdigit "${REPLY}"; then
-      say.error "You can only input 'digits'.\n";
-      exit 1;
-    fi
-    if [[ "${REPLY}" -gt "${#ARGs2[@]}" ]]; then
-      say.error "You should input correct digits.\n";
-      exit 1;
-    fi
+    text.isdigit "${REPLY}" || {
+      say.error "You can only input 'digits'.\n" && exit 1;
+    };
+    [[ "${REPLY}" -gt "${#ARGs2[@]}" ]] &&
+    say.error "You should input correct digits.\n" && exit 1;
     askChoice="${ARG}";
     askReply="${REPLY}";
     break;
   done
-  return 0;
-}
-
-# ask.storagePermission() -> bool
-#   Ask for storage permission in diffrent os.
-ask.storagePermission(){
-  if os.is_termux; then
-    say.warn "Asking for storage permission";
-    termux-setup-storage;
-    say.checkStatus "${?}";
-  fi
 }
