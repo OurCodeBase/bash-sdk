@@ -5,7 +5,6 @@
 screen.cols(){
   # current columns in terminal.
   stty size | awk '{print $2}'
-  [[ "${?}" == 1 ]] && exit 1;
 }
 
 # screen.lines() -> int
@@ -13,7 +12,6 @@ screen.cols(){
 screen.lines(){
   # current lines in terminal.
   stty size | awk '{print $1}'
-  [[ "${?}" == 1 ]] && exit 1;
 }
 
 # screen.isSize(cols,lines) -> bool
@@ -22,9 +20,7 @@ screen.lines(){
 #   cols (int) > takes columns as int.
 #   lines (int) > takes lines as int.
 screen.isSize(){
-  # taking columns args from user.
   local ARGCols=${1};
-  # taking rows args from user.
   local ARGLines=${2};
   local CurrentCols="$(screen.cols)";
   local CurrentLines="$(screen.lines)";

@@ -26,7 +26,7 @@ StatusYelo="${BGYelo}${Gora}";
 CircleIcon="● ";
 Success="SUCCESS";
 Failure="FAILED";
-list=(
+Scribe=(
   "${Blue}${CircleIcon}${Green}${CircleIcon}${Yelo}${CircleIcon}${Red}${CircleIcon}${Genta}${CircleIcon}    "
   " ${Green}${CircleIcon}${Yelo}${CircleIcon}${Red}${CircleIcon}${Genta}${CircleIcon}${Blue}${CircleIcon}   "
   "  ${Red}${CircleIcon}${Genta}${CircleIcon}${Yelo}${CircleIcon}${Blue}${CircleIcon}${Green}${CircleIcon}  "
@@ -44,36 +44,31 @@ spinner.setCursor(){
 _spinner(){
     case $1 in
     start ) 
-      let cols=$(echo $COLUMNS)-${#2}-8
-      printf "%${cols}s"
+      let Cols=$(echo $COLUMNS)-${#2}-8
+      printf "%${Cols}s"
       while true; do
         for i in {0..4}; do
-          printf "\b\r\033[2K${Clear}${2} ${list[i]}"
+          printf "\b\r\033[2K${Clear}${2} ${Scribe[i]}"
           sleep 0.12
         done
         for i in {4..0}; do
-          printf "\b\r\033[2K${Clear}${2} ${list[i]}"
+          printf "\b\r\033[2K${Clear}${2} ${Scribe[i]}"
           sleep 0.12
         done
       done
     ;;
     stop ) 
-      if [[ -z ${3} ]]; then
-       echo "error: spinner isn't running."
-       exit 1
-     fi
+      [[ -z ${3} ]] && {
+      echo "error: spinner isn't running." &&
+      exit 1;
+      };
      kill ${3} > /dev/null 2>&1
-     echo -en "\b${Clear} ➙ "
-     if [[ $2 -eq 0 ]]; then
-       echo -e "${StatusGreen} ${Success} ${Clear}"
-     else
-       echo -e "${StatusRed} ${Failure} ${Clear}"
+     echo -en "\b${Clear} ➙ ";
+     [[ $2 -eq 0 ]] &&
+       echo -e "${StatusGreen} ${Success} ${Clear}" || {
+       echo -e "${StatusRed} ${Failure} ${Clear}" &&
        exit 1;
-     fi
-    ;;
-    *) 
-      echo "error: invalid args, try again with {start/stop}"
-      exit 1
+      };
     ;;
   esac  
 }
@@ -86,21 +81,19 @@ _spinner(){
 # Means:
 #   (use, subject) > (Processing 'Sleep')
 spinner.start(){
-  if [[ ! ${#} -eq 2 ]]; then
-      echo "error: 'missing args'";
-      return 1;
-  fi
-  local uri="${1} '${Green}${2}${Clear}'..."
+  [[ ${#} -eq 2 ]] ||
+  { echo "error: 'missing args'" && return 1; };
+  local UseCase="${1} '${Green}${2}${Clear}'..."
   spinner.setCursor off
-  _spinner start "${uri}" &
-  _spinner_pid="${!}"
+  _spinner start "${UseCase}" &
+  _SpinnerPid="${!}"
   disown
 }
 
 # spinner.stop()
 #   Stops spinner to spin.
 spinner.stop(){
-  _spinner stop ${?} ${_spinner_pid};
-  unset ${_spinner_pid};
+  _spinner stop ${?} ${_SpinnerPid};
+  unset ${_SpinnerPid};
   spinner.setCursor on
 }
