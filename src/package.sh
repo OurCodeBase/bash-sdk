@@ -78,7 +78,7 @@ pkg.chart(){
     # declare package variable.
     local PackageVar="$(echo "${PackageSource}" | grep 'Package:' | awk '{print $2}')";
     # declare package version variable.
-    local PackageVersion="$(echo "${PackageSource}" | grep 'Version:' | awk '{print $2}' | awk -F'-' '{print $1}')";
+    local PackageVersion="$(echo "${PackageSource}" | grep 'Version:' | awk '{print $2}' | awk -F'-' '{print $1}' | awk -F'+' '{print $1}' | awk -F'~' '{print $1}')";
     # declare package file size variable.
     local PackageSizeDL="$(pkg.size 'dnload' "${ARG}")";
     # declare package installed size variable.
