@@ -30,10 +30,8 @@ source "${Dir}"/os.sh
 #   pkg.size(install,package) > Gives you package installed size.
 pkg.size(){
   # checking args given or not.
-  if [[ ! ${#} -eq 2 ]]; then
-    echo "error: 'missing args'";
-    return 1;
-  fi
+  [[ ${#} -eq 2 ]] ||
+  { echo "error: 'missing args'" && return 1; };
   case "${1}" in
     'dnload') local SizeSource="$(apt show "${2}" 2> /dev/null | grep 'Download-Size:')";;
     'install') local SizeSource="$(apt show "${2}" 2> /dev/null | grep 'Installed-Size:')";;

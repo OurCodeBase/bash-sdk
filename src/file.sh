@@ -192,10 +192,8 @@ file.append.hori(){
   # takes file as arg.
   local ARGFile="${3}";
   # checking args given or not.
-  if [[ ! ${#} -eq 3 ]]; then
-    echo "error: 'missing args'";
-    return 1;
-  fi
+  [[ ${#} -eq 3 ]] ||
+  { echo "error: 'missing args'" && return 1; };
   # reading line from given position.
   local Vir="$(file.readline "${Pos}" "${ARGFile}")";
   # concating string to it.
@@ -220,10 +218,8 @@ file.append.vert(){
   # takes file as arg.
   local ARGFile="${3}";
   # checking args given or not.
-  if [[ ! ${#} -eq 3 ]]; then
-    echo "error: 'missing args'";
-    return 1;
-  fi
+  [[ ${#} -eq 3 ]] ||
+  { echo "error: 'missing args'" && return 1; };
   # reduce one from variable.
   local Pos="$(( Pos - 1 ))";
   # do operation.
