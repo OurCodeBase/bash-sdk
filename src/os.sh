@@ -12,6 +12,12 @@ os.is_termux(){
   ls '/data/data/com.termux/files/' &> /dev/null;
 }
 
+# os.is_windows() -> bool
+#   OS is windows or not ?
+os.is_windows(){
+  [[ "$(uname -a)" == *"windows"* ]]
+}
+
 # os.is_shell.zsh() -> bool
 #   Using z-shell or not ?
 os.is_shell.zsh(){

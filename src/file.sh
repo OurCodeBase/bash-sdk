@@ -126,53 +126,44 @@ file.search(){
   grep "${1}" "${2}";
 }
 
-# file.search.int(str,file) -> pos
+# file.search.pos(str,file) -> pos
 #   Search given text in file & return you position (eg: 1,2).
 # Args:
 #   str (str) > takes string to search.
 #   file (str) > takes file path.
-file.search.int(){
+file.search.pos(){
   # return final result.
   grep -n "${1}" "${2}" | cut -d: -f1 | head -n 1;
 }
 
-# path.dirArray(dir) -> STRIP.
+# path.dirArray(dir,*options) -> STRIP.
 #   Gives you array of files in given directory.
 # Args:
 #   dir (str) > takes directory path.
+#   --by-time (obj) > Optional: list will be sorted by time.
+#   --no-extension (obj) > Optional: list have no file extensions.
 path.dirArray(){
   # taking directory arg from user.
-  local ARGDir="${1}";
+  local ARGDir=${1} && shift;
   # array list file location.
   local UriFile=".Uri";
-  # check file exist.
-  path.isdir "${ARGDir}" &&
-  # listing files to a file.
-  ls "${ARGDir}" > "${UriFile}" &&
-  # reading data from array file
+  # check directory exist.
+  path.isdir "${ARGDir}" && {
+    # listing files to a file.
+    if [[ "${*}" == *"--by-time"* ]]; then
+      ls -t "${ARGDir}" > "${UriFile}";
+      shift;
+    else ls "${ARGDir}" > "${UriFile}";
+    fi
+    # no extension of requested files.
+    if [[ "${*}" == *"--no-extension"* ]]; then
+      local UriChotuData="$(sed 's/\(.*\)\.\(.*\)/\1/' "${UriFile}")";
+      echo "${UriChotuData}" > "${UriFile}";
+    fi
+  } &&
+  # reading data from uri file.
   file.readlines "${UriFile}" &&
-  # remove that temp file.
-  rm "${UriFile}" &&
-  # return function.
-  return 0;
-}
-
-# path.dirArray.SORT_BY_TIME(dir) -> STRIP.
-#   Gives you array of files in given directory sorted by time.
-# Args:
-#   dir (str) > takes directory path.
-path.dirArray.SORT_BY_TIME(){
-  # taking directory arg from user.
-  local ARGDir="${1}";
-  # array list file location.
-  local UriFile=".Uri";
-  # check file exist.
-  path.isdir "${ARGDir}" &&
-  # listing files to a file.
-  ls -t "${ARGDir}" > "${UriFile}" &&
-  # reading data from array file
-  file.readlines "${UriFile}" &&
-  # remove that temp file.
+  # delete that temp file.
   rm "${UriFile}" &&
   # return function.
   return 0;
