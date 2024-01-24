@@ -1,6 +1,6 @@
 A bash library to create standalone scripts.
 
-Release: 1.2.56
+Release: v1.2.57
 
 There are some features of bash-sdk are mentioned here.
 * OOPS like code 💎.
