@@ -120,16 +120,16 @@ _uri.addModuleSource(){
   # checking catogories.
   if [[ "${PRIMARY_MODULES[*]}" == *"${ARGModuleVar}"* ]]; then
     # position of catogory hash.
-    local PosMap="$(file.search.int "#@PRIMARY_MODULES" "${ARGResultFile}")";
+    local PosMap="$(file.search.pos "#@PRIMARY_MODULES" "${ARGResultFile}")";
   elif [[ "${SECONDARY_MODULES[*]}" == *"${ARGModuleVar}"* ]]; then
     # position of catogory hash.
-    local PosMap="$(file.search.int "#@SECONDARY_MODULES" "${ARGResultFile}")";
+    local PosMap="$(file.search.pos "#@SECONDARY_MODULES" "${ARGResultFile}")";
   elif [[ "${TERTIARY_MODULES[*]}" == *"${ARGModuleVar}"* ]]; then
     # position of catogory hash.
-    local PosMap="$(file.search.int "#@TERTIARY_MODULES" "${ARGResultFile}")";
+    local PosMap="$(file.search.pos "#@TERTIARY_MODULES" "${ARGResultFile}")";
   else
     # position of catogory hash.
-    local PosMap="$(file.search.int "#@OTHER_MODULES" "${ARGResultFile}")";
+    local PosMap="$(file.search.pos "#@OTHER_MODULES" "${ARGResultFile}")";
   fi
   # installing module.
   file.append.vert "$(_uri.chotuCode "${ARGModule}")" "$(( PosMap+1 ))" "${ARGResultFile}" &&
