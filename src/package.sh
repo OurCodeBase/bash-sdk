@@ -45,9 +45,7 @@ pkg.size(){
     'MB') echo "${Size}";;
     'kB') echo "$(( Size/1024 ))";;
     'B') echo "$(( Size/1048576 ))";;
-  esac 
-  # return function.
-  return;
+  esac
 }
 
 # pkg.chart(pkgs)
@@ -114,9 +112,7 @@ pkg.install(){
     do
       spinner.start 'Installing' "${ARG}";
       # started installation.
-      if os.is_termux; then
-        apt-get install -qq "${ARG}" > /dev/null;
-      elif os.is_shell.zsh; then
+      if os.is_termux || os.is_shell.zsh; then
         apt-get install -qq "${ARG}" > /dev/null;
       else
         sudo apt-get install -qq "${ARG}" > /dev/null;

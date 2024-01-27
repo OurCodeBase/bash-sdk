@@ -27,9 +27,9 @@ ask.case(){
   read -p " ? [Y/n] " ARGS;
   echo;
   case "${ARGS}" in
-    y|Y) return 0;;
+    y|Y|'') return 0;;
     n|N) { say.error "Process Aborted.\n" && exit 1; };;
-    *) { say.error "You have to enter only\n\t\t'Y' for Yes &\n\t\t'n' for No.\n" && exit 1; };;
+    *) { say.error "You have to enter only \n\t\t'Y' for Yes & \n\t\t'n' for No.\n" && exit 1; };;
   esac
 }
 
@@ -43,16 +43,15 @@ ask.case(){
 ask.choice(){
   PS3="
   ${1} > ";
+  shift;
   local ARGs=("${@}");
-  # leave first variable of array for title.
-  local ARGs2=("${ARGs[@]:1}");
   echo;
-  select ARG in "${ARGs2[@]}"
+  select ARG in "${ARGs[@]}"
   do
     text.isdigit "${REPLY}" || {
       say.error "You can only input 'digits'.\n" && exit 1;
     };
-    [[ "${REPLY}" -gt "${#ARGs2[@]}" ]] &&
+    [[ "${REPLY}" -gt "${#ARGs[@]}" ]] &&
     say.error "You should input correct digits.\n" && exit 1;
     askChoice="${ARG}";
     askReply="${REPLY}";
