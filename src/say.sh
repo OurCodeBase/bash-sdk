@@ -43,7 +43,7 @@ say.gencolor(){
 # ARGS:
 # - str (str): takes string as arg.
 # - --gencolor (obj,optional): adds colors randomly to syntax.
-# - --color <color> (str,optional): adds given color to syntax.
+# - --color <color> (obj,str,optional): adds given color to syntax.
 _say.colorizeString(){
   local ARGString="${1}";
   local isGenColorEnabled=1;
