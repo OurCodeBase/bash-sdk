@@ -3,114 +3,129 @@
 Clear="\033[0m";
 # Suppressed Variables
 if (( 1<2 )); then
-# Colors
-Gora="\033[1;97m"
+# ----------
+# Colors.
+# Gora="\033[0;97m"
+# ----------
 # BG Colors.
-BGRed="\033[1;41m";
-BGGreen="\033[1;42m";
-BGYelo="\033[1;43m";
+# BGRed="\033[1;41m";
+# BGGreen="\033[1;42m";
+# BGYelo="\033[1;43m";
+# BGBold="\033[1m";
+# ----------
 # Status Colors.
-StatusRed="${BGRed}${Gora}";
-StatusGreen="${BGGreen}${Gora}";
-StatusYelo="${BGYelo}${Gora}";
+# StatusRed="${BGRed}${Gora}";
+# StatusGreen="${BGGreen}${Gora}";
+# StatusYelo="${BGYelo}${Gora}";
+# ----------
 # Global variables.
-Source="'([^']*)'";
+Pattern="'([^']*)'";
+# Color plate.
+COLOR_STRIP=(
+  "\033[0;31m" # Red
+  "\033[0;32m" # Green
+  "\033[0;33m" # Yelo
+  "\033[0;34m" # Blue
+  "\033[0;35m" # Genta
+  "\033[0;36m" # Cyan
+);
 fi
 
-# Colors
-Red="\033[1;31m";
-Green="\033[1;32m";
-Yelo="\033[1;33m";
-
-# say.gencolor()
-#   Gives you a random color code.
+# say.gencolor() ~ color
+# Generates color codes for you.
 say.gencolor(){
-  local STRIP=(
-    "\033[1;31m"
-    "\033[1;32m"
-    "\033[1;33m"
-    "\033[1;34m"
-    "\033[1;35m"
-    "\033[1;36m"
-  );
-  echo "${STRIP[$(( RANDOM % ${#STRIP[@]} ))]}";
-  return 0;
+  echo "${COLOR_STRIP[$(( RANDOM % ${#COLOR_STRIP[@]} ))]}";
 }
 
-# say(str) -> str
-#   Say strings with syntax highlighting feature.
-say(){
-  local String="${1}";
-  local STRIP=(${String});
-  local String='';
-  for Uri in "${STRIP[@]}"
+# _say.colorizeString(str,@--gencolor,@--color <color>) ~ str
+# Create and returns you raw colorized strings.
+# 
+# ARGS:
+# - str (str): takes string as arg.
+# - --gencolor (obj,optional): adds colors randomly to syntax.
+# - --color <color> (str,optional): adds given color to syntax.
+_say.colorizeString(){
+  local ARGString="${1}";
+  local isGenColorEnabled=1;
+  local Sentence=(${ARGString});
+  local String;
+  shift;
+  case "${1}" in
+    --gencolor) 
+      local isGenColorEnabled=0;
+    ;;
+    --color) 
+      local Color="${2}";
+    ;;
+  esac
+  for Shabd in "${Sentence[@]}"
   do
-    if [[ "${Uri}" =~ ${Source} ]]; then
+    if [[ "${Shabd}" =~ ${Pattern} ]]; then
+      [[ "${isGenColorEnabled}" == 1 ]] || \
       local Color="$(say.gencolor)";
-      local String+="${Color}${Uri}${Clear} ";
-    else local String+="${Uri} ";
+      local String+="${Color}${Shabd}${Clear} ";
+    else
+      local String+="${Shabd} ";
     fi
   done
+  echo "${String}";
+}
+
+# say(str) ~ str
+# Say strings with syntax highlighting feature.
+say(){
+  local String="$(_say.colorizeString "${1}" --gencolor)";
   echo -e "${String}";
-  return 0;
 }
 
 _status(){
   case "${1}" in
     -error) 
-      local Color="\033[1;31m";
-      local StatusColor="${StatusRed}";
-      ;;
-    -success) 
-      local Color="\033[1;32m";
-      local StatusColor="${StatusGreen}";
-      ;;
+      local Color="\033[0;31m";
+      local Header="ERR";
+    ;;
     -warn) 
-      local Color="\033[1;33m";
-      local StatusColor="${StatusYelo}";
-      ;;
+      local Color="\033[0;33m";
+      local Header="WARN";
+    ;;
+    -success) 
+      local Color="\033[0;32m";
+      local Header="INFO";
+    ;;
   esac
-  local String="${2}";
-  local xSTRIP=(${String});
-  local String='';
-  for Uri in "${xSTRIP[@]}"
-  do
-    if [[ "${Uri}" =~ ${Source} ]]; then
-      local String+="${Color}${Uri}${Clear} ";
-    else local String+="${Uri} ";
-    fi
-  done
-  echo -e "${StatusColor} INFO ${Clear} ➙ ${String}";
-  return 0;
+  local String="$(_say.colorizeString "${2}" --color "${Color}")";
+  echo -ne "[${Color} ${Header} ${Clear}]: ";
+  echo -e "${String}";
 }
 
-# say.error(str) -> str
-#   Says error to terminal.
+# say.error(str) ~ str
+# Says error to terminal.
 say.error(){
   _status -error "${@}";
 }
 
-# say.warn(str) -> str
-#   Says warning to terminal.
+# say.warn(str) ~ str
+# Says warning to terminal.
 say.warn(){
   _status -warn "${@}";
 }
 
-# say.success(str) -> str
-#   Says success to terminal.
+# say.success(str) ~ str
+# Says success to terminal.
 say.success(){
   _status -success "${@}";
 }
 
-# say.checkStatus(status) -> str
-#   This prints success or failure according to exit code.
-# Args:
-#   status (int) > takes exit code.
+# say.checkStatus(exitCode) ~ str
+# This prints success or failure according to exit code.
+# 
+# ARGS:
+# - exitCode (int): takes exit code.
 say.checkStatus(){
   if [[ "${1}" == 0 ]]; then
-    echo -e " ➙ ${StatusGreen} SUCCESS ${Clear}";
+    echo -e " ~ [${COLOR_STRIP[1]} SUCCESS ${Clear}]";
   else
-    echo -e " ➙ ${StatusRed} FAILED ${Clear}";
+    echo -e " ~ [${COLOR_STRIP[0]} FAILED ${Clear}]";
     exit 1;
   fi
 }
