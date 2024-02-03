@@ -14,47 +14,62 @@ source "${Dir}"/string.sh
 # source string.sh
 
 # Stores object that you selected.
-askChoice='';
+askObject='';
 # Stores position of object that you selected.
-askReply='';
+askPosition='';
 
-# ask.case(title) -> bool
-#   This takes case ( yes or no ) for any work.
-# Args:
-#   title (str) > takes title (eg: You're Agree).
+# ask.case(title) ~ bool
+# This takes case ( yes or no ) for any work.
+#
+# ARGS:
+# - title (str): takes title (eg: You're Agree).
 ask.case(){
   echo -ne "\n    ${1}";
   read -p " ? [Y/n] " ARGS;
   echo;
   case "${ARGS}" in
-    y|Y|'') return 0;;
-    n|N) { say.error "Process Aborted.\n" && exit 1; };;
-    *) { say.error "You have to enter only \n\t\t'Y' for Yes & \n\t\t'n' for No.\n" && exit 1; };;
+    y|Y|'') 
+      return 0;
+    ;;
+    n|N) 
+      say.error "Process Aborted.\n";
+      exit 1;
+    ;;
+    *) say.error "You have to enter only \n
+      \t\t 'Y' for Yes & \n
+      \t\t 'n' for No.\n";
+      exit 1;
+    ;;
   esac
 }
 
-# ask.choice(title,list) -> var
-#   This creates a simple menu.
-# Args:
-#   title (str) > takes title (eg: Choose One).
-#   list (array) > takes array as arg.
-# Returns:
-#   object (str) > result in 'askChoice' & 'askReply' variables.
+# ask.choice(title,list) ~ var
+# This creates a simple menu.
+# 
+# ARGS:
+# - title (str): takes title (eg: Choose One).
+# - list (array): takes array as arg.
+#
+# RETURNS:
+# - var (str): result in 'askObject' & 'askPosition' variables.
 ask.choice(){
   PS3="
-  ${1} > ";
+  ${1}: ";
   shift;
   local ARGs=("${@}");
   echo;
   select ARG in "${ARGs[@]}"
   do
-    text.isdigit "${REPLY}" || {
-      say.error "You can only input 'digits'.\n" && exit 1;
-    };
-    [[ "${REPLY}" -gt "${#ARGs[@]}" ]] &&
-    say.error "You should input correct digits.\n" && exit 1;
-    askChoice="${ARG}";
-    askReply="${REPLY}";
-    break;
+    if text.isdigit "${REPLY}"; then
+      say.error "You can only input 'digits'.\n";
+      exit 1;
+    elif [[ "${REPLY}" -gt "${#ARGs[@]}" ]]; then
+      say.error "You should input correct digits.\n";
+      exit 1;
+    else
+      askObject="${ARG}";
+      askPosition="${REPLY}";
+      break;
+    fi
   done
 }
