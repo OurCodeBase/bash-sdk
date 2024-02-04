@@ -15,14 +15,12 @@ source "${Dir}"/ask.sh
 # source inspect.sh
 # source ask.sh
 
-# repo.size(api) ~ int
-# Used to get size of a repo.
-# 
+# repo.size(api) -> int
+#   Used to get size of a repo.
 # Args:
-# - api (str): takes api of github repo. (eg: "OurCodeBase/bash-sdk")
-# 
+#   api (str) > takes api of github repo. (eg: "OurCodeBase/bash-sdk")
 # Returns:
-# - size (int): gives you file size in MiB. (eg: 30)
+#   size (int) > gives you file size in MiB. (eg: 30)
 repo.size(){
   inspect.is_func 'curl';
   local Api="$(echo "${1}" | awk '{print $1}')";
@@ -31,10 +29,9 @@ repo.size(){
 }
 
 # repo.chart(apis)
-# Used to view info of given repositories.
-# 
+#   Used to view info of given repositories.
 # Args:
-# - apis (array): takes array of repository api.
+#   apis (array) > takes array of repository api.
 repo.chart(){
   inspect.ScreenSize '50' '12';
   local ARGs=("${@}");
@@ -61,12 +58,11 @@ repo.chart(){
   return 0;
 }
 
-# repo.clone(apis,@dirs)
-# Used to start cloning of a repository.
-# 
+# repo.clone(apis,*dirs)
+#   Used to start cloning of a repository.
 # Args:
-# - apis (array): takes apis of github repo. (eg: OurCodeBase/bash-sdk)
-# - dirs (array,optional): You can give directory path to clone to it.
+#   apis (array) > takes apis of github repo. (eg: OurCodeBase/bash-sdk)
+#   dirs (array) > Optional: You can give directory path to clone to it.
 repo.clone(){
   # required to run.
   inspect.is_func 'git';

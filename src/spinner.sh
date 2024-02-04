@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Shorts:
-# - spinner.start(use,subject)
-# - run your functions.
-# - spinner.stop
+#   spinner.start(use,subject)
+#   run your functions.
+#   spinner.stop
 
 # Suppressed Variables
 if (( 1<2 )); then
@@ -14,7 +14,15 @@ Genta="\033[1;35m";
 Green="\033[1;32m";
 Red="\033[1;31m";
 Yelo="\033[1;33m";
-# Global variables.
+Gora="\033[1;97m"
+# BG Colors.
+BGRed="\033[1;41m";
+BGGreen="\033[1;42m";
+BGYelo="\033[1;43m";
+# Status Colors.
+StatusRed="${BGRed}${Gora}";
+StatusGreen="${BGGreen}${Gora}";
+StatusYelo="${BGYelo}${Gora}";
 CircleIcon="● ";
 Success="SUCCESS";
 Failure="FAILED";
@@ -28,7 +36,7 @@ Scribe=(
 fi
 
 # spinner.setCursor(on~off)
-# Switch terminal cursor easily.
+#   Switch terminal cursor easily.
 spinner.setCursor(){
   setterm -cursor "${1}";
 }
@@ -55,27 +63,23 @@ _spinner(){
       exit 1;
       };
      kill ${3} > /dev/null 2>&1
-     echo -en "\b${Clear} → ";
-     if [[ $2 -eq 0 ]]; then
-       echo -e "[ ${Green}${Success}${Clear} ]";
-     else
-       echo -e "[ ${Red}${Failure}${Clear} ]";
-       spinner.setCursor on;
+     echo -en "\b${Clear} ➙ ";
+     [[ $2 -eq 0 ]] &&
+       echo -e "${StatusGreen} ${Success} ${Clear}" || {
+       echo -e "${StatusRed} ${Failure} ${Clear}" &&
        exit 1;
-     fi
+      };
     ;;
   esac  
 }
 
 # spinner.start(use,subject)
-# Starts spinner to spin.
-# 
+#   Starts spinner to spin.
 # Args:
-# - use (str): takes process (eg: installing, processing).
-# - subject (str): takes subject (eg: file, function).
-# 
-# EG:
-# - (use,subject): (Processing 'Sleep')
+#   use (str) > takes process (eg: installing, processing).
+#   subject (str) > takes subject (eg: file, function).
+# Means:
+#   (use, subject) > (Processing 'Sleep')
 spinner.start(){
   [[ ${#} -eq 2 ]] ||
   { echo "error: 'missing args'" && return 1; };
@@ -87,7 +91,7 @@ spinner.start(){
 }
 
 # spinner.stop()
-# Stops spinner to spin.
+#   Stops spinner to spin.
 spinner.stop(){
   _spinner stop ${?} ${_SpinnerPid};
   unset ${_SpinnerPid};
