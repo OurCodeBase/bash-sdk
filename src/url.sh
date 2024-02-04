@@ -17,12 +17,14 @@ source "${Dir}"/inspect.sh
 # source spinner.sh
 # source inspect.sh
 
-# url.contentSize(url) -> int
-#   Gives you size of content file in MiB.
-# Args:
-#   url (str) > takes url as string.
-# Returns:
-#   size (int) > size in MiB (eg: 60).
+# url.contentSize(url) ~ int
+# Gives you size of content file in MiB.
+# 
+# ARGS:
+# - url (str): takes url as string.
+# 
+# RETURNS:
+# - size (int): size in MiB (eg: 60).
 url.contentSize(){
   # checking required functions.
   inspect.is_func 'wget';
@@ -31,11 +33,12 @@ url.contentSize(){
   echo "$(( ContentSize/1048576 ))";
 }
 
-# url.contentChart(urls,*paths)
-#   This is used to chart urls and size.
-# Args:
-#   urls (array) > takes one or array of urls.
-#   paths (array) > Optional: takes file paths.
+# url.contentChart(urls,@paths)
+# This is used to chart urls and size.
+# 
+# ARGS:
+# - urls (array): takes one or array of urls.
+# - paths (array,optional): takes file paths.
 url.contentChart(){
   inspect.ScreenSize '50' '12';
   local ARGs=("${@}")
@@ -66,11 +69,12 @@ url.contentChart(){
   return 0;
 }
 
-# url.getContent(urls,*paths)
-#   This is used to get files via urls.
-# Args:
-#   urls (array) > takes one or array of url.
-#   paths (array) > Optional: takes files path.
+# url.getContent(urls,@paths)
+# This is used to get files via urls.
+# 
+# ARGS:
+# - urls (array): takes one or array of url.
+# - paths (array,optional): takes files path.
 url.getContent(){
   local ARGs=("${@}")
   url.contentChart "${ARGs[@]}";
