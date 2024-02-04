@@ -129,3 +129,16 @@ say.checkStatus(){
     exit 1;
   fi
 }
+
+# log(str) ~ str
+# Say log to the user.
+log(){
+  case "${?}" in
+    0) 
+      _status -success "${@}";
+    ;;
+    *) 
+      _status -error "${@}";
+    ;;
+  esac
+}
