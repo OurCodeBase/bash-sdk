@@ -13,11 +13,12 @@ source "${Dir}"/os.sh
 # source say.sh
 # source os.sh
 
-# inspect.ScreenSize(cols,lines) -> str
-#   Checks that screen size is sufficient to project.
-# Args:
-#   cols (int) > takes columns as arg.
-#   lines (int) > takes lines as arg.
+# inspect.ScreenSize(cols,lines) ~ str
+# Checks that screen size is sufficient to project.
+# 
+# ARGS:
+# - cols (int): takes columns as arg.
+# - lines (int): takes lines as arg.
 inspect.ScreenSize(){
   local ARGCols="${1}";
   local ARGRou="${2}";
@@ -34,8 +35,8 @@ inspect.ScreenSize(){
   };
 }
 
-# inspect.is_func(function) -> str
-#   An extension of os.is_func.
+# inspect.is_func(function) ~ str
+# An extension of os.is_func.
 inspect.is_func(){
   os.is_func "${1}" || {
     say.error "There is no '${1}'\n

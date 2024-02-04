@@ -17,24 +17,22 @@ source "${Dir}"/os.sh
 # source os.sh
 # source ask.sh
 
-# pkg.size(dnload~install,package) -> int
-#   Gives you needed size of package.
-# Args:
-#   dnload (str) > dnload to get file size.
-#   install (str) > install to get package installed size.
-#   package (str) > takes package (eg: python,nodejs).
-# Returns:
-#   size (int) > Gives you size in MiBs.
-# Usage:
-#   pkg.size(dnload,package) > Gives you package file size.
-#   pkg.size(install,package) > Gives you package installed size.
+# pkg.size(@--dnload <package>,@--install <package>) ~ int
+# Gives you needed size of package.
+# 
+# ARGS:
+# - --dnload <package> (obj,str,optional): To get package file size.
+# - --install <packages> (obj,str,optional): To get package installed size.
+# 
+# RETURNS:
+# - size (int): Gives you size in MiBs.
 pkg.size(){
   # checking args given or not.
   [[ ${#} -eq 2 ]] ||
   { echo "error: 'missing args'" && return 1; };
   case "${1}" in
-    'dnload') local SizeSource="$(apt show "${2}" 2> /dev/null | grep 'Download-Size:')";;
-    'install') local SizeSource="$(apt show "${2}" 2> /dev/null | grep 'Installed-Size:')";;
+    --dnload) local SizeSource="$(apt show "${2}" 2> /dev/null | grep 'Download-Size:')";;
+    --install) local SizeSource="$(apt show "${2}" 2> /dev/null | grep 'Installed-Size:')";;
   esac
   local Size="$(echo "${SizeSource}" | awk '{print $2}')";
   local SizeUnit="$(echo "${SizeSource}" | awk '{print $3}')";
@@ -49,9 +47,10 @@ pkg.size(){
 }
 
 # pkg.chart(pkgs)
-#   Use to view chart of packages.
-# Args:
-#   pkgs (array) > takes array of packages.
+# Use to view chart of packages.
+# 
+# ARGS:
+# - pkgs (array): takes array of packages.
 pkg.chart(){
   inspect.ScreenSize '62' '12';
   # this takes all packages as arg.
@@ -76,9 +75,9 @@ pkg.chart(){
     # declare package version variable.
     local PackageVersion="$(echo "${PackageSource}" | grep 'Version:' | awk '{print $2}' | awk -F'-' '{print $1}' | awk -F'+' '{print $1}' | awk -F'~' '{print $1}')";
     # declare package file size variable.
-    local PackageSizeDL="$(pkg.size 'dnload' "${ARG}")";
+    local PackageSizeDL="$(pkg.size --dnload "${ARG}")";
     # declare package installed size variable.
-    local PackageSizeIN="$(pkg.size 'install' "${ARG}")";
+    local PackageSizeIN="$(pkg.size --install "${ARG}")";
       printf "  │  ${Green}%-25s${Clear} ${Yelo}%-10s${Clear} ${Yelo}%3s${Clear} %-3s ${Yelo}%3s${Clear} %-3s  │\n" "${PackageVar}" "${PackageVersion}" "${PackageSizeDL}" 'MiB' "${PackageSizeIN}" 'MiB';
     # Adding dl sizes of all packages.
     local PuraSizeDL=$(( PuraSizeDL + PackageSizeDL ));
@@ -98,9 +97,10 @@ pkg.chart(){
 }
 
 # pkg.install(packages)
-#   Used to install packages with good ui.
-# Args:
-#   packages (array) > takes packages as args. (eg: python nodejs neovim)
+# Used to install packages with good ui.
+# 
+# ARGS:
+# - packages (array): takes packages as args. (eg: python nodejs)
 pkg.install(){
   # function starts here.
   local ARGs=("${@}");
