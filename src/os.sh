@@ -31,7 +31,7 @@ os.is_shell.zsh(){
 # os.is_func(function) ~ bool
 # Checks that function is exist or not.
 # 
-# ARGS:
+# Args:
 # - function (str): takes function as string.
 os.is_func(){
   command -v "${1}" &> /dev/null;

@@ -20,11 +20,11 @@ source "${Dir}"/os.sh
 # pkg.size(@--dnload <package>,@--install <package>) ~ int
 # Gives you needed size of package.
 # 
-# ARGS:
+# Args:
 # - --dnload <package> (obj,str,optional): To get package file size.
 # - --install <packages> (obj,str,optional): To get package installed size.
 # 
-# RETURNS:
+# Returns:
 # - size (int): Gives you size in MiBs.
 pkg.size(){
   # checking args given or not.
@@ -49,7 +49,7 @@ pkg.size(){
 # pkg.chart(pkgs)
 # Use to view chart of packages.
 # 
-# ARGS:
+# Args:
 # - pkgs (array): takes array of packages.
 pkg.chart(){
   inspect.ScreenSize '62' '12';
@@ -99,7 +99,7 @@ pkg.chart(){
 # pkg.install(packages)
 # Used to install packages with good ui.
 # 
-# ARGS:
+# Args:
 # - packages (array): takes packages as args. (eg: python nodejs)
 pkg.install(){
   # function starts here.

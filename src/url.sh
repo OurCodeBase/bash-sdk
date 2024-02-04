@@ -20,10 +20,10 @@ source "${Dir}"/inspect.sh
 # url.contentSize(url) ~ int
 # Gives you size of content file in MiB.
 # 
-# ARGS:
+# Args:
 # - url (str): takes url as string.
 # 
-# RETURNS:
+# Returns:
 # - size (int): size in MiB (eg: 60).
 url.contentSize(){
   # checking required functions.
@@ -36,7 +36,7 @@ url.contentSize(){
 # url.contentChart(urls,@paths)
 # This is used to chart urls and size.
 # 
-# ARGS:
+# Args:
 # - urls (array): takes one or array of urls.
 # - paths (array,optional): takes file paths.
 url.contentChart(){
@@ -72,7 +72,7 @@ url.contentChart(){
 # url.getContent(urls,@paths)
 # This is used to get files via urls.
 # 
-# ARGS:
+# Args:
 # - urls (array): takes one or array of url.
 # - paths (array,optional): takes files path.
 url.getContent(){

@@ -21,7 +21,7 @@ askPosition='';
 # ask.case(title) ~ bool
 # This takes case ( yes or no ) for any work.
 #
-# ARGS:
+# Args:
 # - title (str): takes title (eg: You're Agree).
 ask.case(){
   echo -ne "\n    ${1}";
@@ -46,11 +46,11 @@ ask.case(){
 # ask.choice(title,list) ~ var
 # This creates a simple menu.
 # 
-# ARGS:
+# Args:
 # - title (str): takes title (eg: Choose One).
 # - list (array): takes array as arg.
 #
-# RETURNS:
+# Returns:
 # - var (str): result in 'askObject' & 'askPosition' variables.
 ask.choice(){
   PS3="

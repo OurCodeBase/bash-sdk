@@ -3,7 +3,7 @@
 # path.isdir(dir) ~ bool
 # Checks that directory exist or not.
 # 
-# ARGS:
+# Args:
 # - dir (str): takes directory path.
 path.isdir(){
   # checking dir exist or not.
@@ -13,7 +13,7 @@ path.isdir(){
 # path.isfile(file) ~ bool
 # Checks that file exist or not.
 #  
-# ARGS:
+# Args:
 # - file (str): takes file path.
 path.isfile(){
   # checking file exist or not.
@@ -23,7 +23,7 @@ path.isfile(){
 # file.move(src,dst)
 # This can use to move files.
 #  
-# ARGS:
+# Args:
 # - src (str): takes source path.
 # - dst (str): takes destination path.
 file.move(){
@@ -34,7 +34,7 @@ file.move(){
 # file.copy(src,dst)
 # This can use to copy files.
 #  
-# ARGS:
+# Args:
 # - src (str): takes source path.
 # - dst (str): takes destination path.
 file.copy(){
@@ -44,7 +44,7 @@ file.copy(){
 
 # file.erase(file)
 #
-# ARGS:
+# Args:
 # - file (str): takes file path.
 file.erase(){
   # cleaning file.
@@ -54,7 +54,7 @@ file.erase(){
 # file.pop(pos,file)
 # Popout given position of line in file.
 #
-# ARGS:
+# Args:
 # - pos (int): takes position.
 # - file (str): takes file path.
 file.pop(){
@@ -65,7 +65,7 @@ file.pop(){
 # file.readlines.int(file) ~ int
 # Gives you total lines of a file.
 #
-# ARGS:
+# Args:
 # - file (str): takes file path.
 file.readlines.int(){
   # return final result.
@@ -75,7 +75,7 @@ file.readlines.int(){
 # file.readline(pos,file) ~ str
 # Gives you line from given position of file.
 #  
-# ARGS:
+# Args:
 # - pos (int): takes position.
 # - file (str): takes file path.
 file.readline(){
@@ -86,7 +86,7 @@ file.readline(){
 # file.readlines(file) ~ STRIP.
 # Gives you STRIP array of lines of given file.
 #  
-# ARGS:
+# Args:
 # - file (str): takes file path.
 file.readlines(){
   # taking file arg from user.
@@ -108,7 +108,7 @@ file.readlines(){
 # file.readline.tall(file) ~ str
 # Gives you largest line of file.
 # 
-# ARGS:
+# Args:
 # - file (str): takes file path.
 file.readline.tall(){
   # return final result.
@@ -118,7 +118,7 @@ file.readline.tall(){
 # file.replace.pos(str,pos,file)
 # This replace text from given line of file.
 # 
-# ARGS:
+# Args:
 # - str (str): takes string to replace.
 # - pos (int): takes position.
 # - file (str): takes file path.
@@ -130,7 +130,7 @@ file.replace.pos(){
 # file.search(str,file) ~ str
 # Search given text in file & return you that line.
 # 
-# ARGS:
+# Args:
 # - str (str): takes string to search.
 # - file (str): takes file path.
 file.search(){
@@ -141,7 +141,7 @@ file.search(){
 # file.search.pos(str,file) ~ pos
 # Search given text in file & return you position (eg: 1,2).
 # 
-# ARGS:
+# Args:
 # - str (str): takes string to search.
 # - file (str): takes file path.
 file.search.pos(){
@@ -152,7 +152,7 @@ file.search.pos(){
 # path.dirArray(dir,@--by-time,@--no-extension) ~ STRIP.
 # Gives you array of files in given directory.
 #  
-# ARGS:
+# Args:
 # - dir (str): takes directory path.
 # - --by-time (obj,optional): list will be sorted by time.
 # - --no-extension (obj,optional): list have no file extensions.
@@ -184,7 +184,7 @@ path.dirArray(){
 # file.append.hori(str,pos,file)
 # This appends text to file horizontally.
 #
-# ARGS:
+# Args:
 # - str (str): takes string to append it.
 # - pos (int): takes position.
 # - file (str): takes file path.
@@ -203,7 +203,7 @@ file.append.hori(){
 # file.append.vert(str,pos,file)
 # This appends text to file vertically.
 #
-# ARGS:
+# Args:
 # - str (str): takes string to append it.
 # - pos (int): takes position.
 # - file (str): takes file path.

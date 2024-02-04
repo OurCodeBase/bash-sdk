@@ -17,7 +17,7 @@ screen.lines(){
 # screen.isSize(cols,lines) ~ bool
 # Checks that screen has atleast given lines and columns.
 # 
-# ARGS:
+# Args:
 # - cols (int): takes columns as int.
 # - lines (int): takes lines as int.
 screen.isSize(){

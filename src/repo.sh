@@ -18,10 +18,10 @@ source "${Dir}"/ask.sh
 # repo.size(api) ~ int
 # Used to get size of a repo.
 # 
-# ARGS:
+# Args:
 # - api (str): takes api of github repo. (eg: "OurCodeBase/bash-sdk")
 # 
-# RETURNS:
+# Returns:
 # - size (int): gives you file size in MiB. (eg: 30)
 repo.size(){
   inspect.is_func 'curl';
@@ -33,7 +33,7 @@ repo.size(){
 # repo.chart(apis)
 # Used to view info of given repositories.
 # 
-# ARGS:
+# Args:
 # - apis (array): takes array of repository api.
 repo.chart(){
   inspect.ScreenSize '50' '12';
@@ -64,7 +64,7 @@ repo.chart(){
 # repo.clone(apis,@dirs)
 # Used to start cloning of a repository.
 # 
-# ARGS:
+# Args:
 # - apis (array): takes apis of github repo. (eg: OurCodeBase/bash-sdk)
 # - dirs (array,optional): You can give directory path to clone to it.
 repo.clone(){

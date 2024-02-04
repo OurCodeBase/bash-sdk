@@ -5,7 +5,7 @@
 # _db.isKeyExist(key,file) ~ bool
 # Checks that key is exist or not.
 # 
-# ARGS:
+# Args:
 # - key (str): takes key of db.
 # - file (str): takes file path.
 _db.isKeyExist(){
@@ -15,7 +15,7 @@ _db.isKeyExist(){
 # db.read(key,file) ~ str
 # Reads value of given key in db file.
 # 
-# ARGS:
+# Args:
 # - key (str): takes key of db.
 # - file (str): takes file path.
 db.read(){
@@ -31,7 +31,7 @@ db.read(){
 # db.create(key,value,file)
 # Creates data key and value to db.
 #  
-# ARGS:
+# Args:
 # - key (str): takes key of db.
 # - value (str): takes value of key.
 # - file (str): takes file path.
@@ -47,7 +47,7 @@ db.create(){
 # db.update(key,value,file)
 # Update data of key in db file.
 #  
-# ARGS:
+# Args:
 # - key (str): takes key of db.
 # - value (str): takes update value of key.
 # - file (str): takes file path.
@@ -70,7 +70,7 @@ db.update(){
 # db.delete(key,file)
 # Delete key and value of db file.
 #  
-# ARGS:
+# Args:
 # - key (str): takes key of db.
 # - file (str): takes file path.
 db.delete(){

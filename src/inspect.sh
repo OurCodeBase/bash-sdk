@@ -16,7 +16,7 @@ source "${Dir}"/os.sh
 # inspect.ScreenSize(cols,lines) ~ str
 # Checks that screen size is sufficient to project.
 # 
-# ARGS:
+# Args:
 # - cols (int): takes columns as arg.
 # - lines (int): takes lines as arg.
 inspect.ScreenSize(){

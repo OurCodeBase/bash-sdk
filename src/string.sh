@@ -3,7 +3,7 @@
 # text.randize(array) ~ obj
 # Gives you random object of array.
 # 
-# ARGS:
+# Args:
 # - array (array): takes array of objects.
 text.randize(){
   local array=("$@");
@@ -13,7 +13,7 @@ text.randize(){
 # text.isdigit(str) ~ bool
 # Checks string is digit or not.
 # 
-# ARGS:
+# Args:
 # - str (str): takes string as arg.
 text.isdigit(){
   [[ "${1}" =~ ^[[:digit:]]+$ ]];
@@ -22,7 +22,7 @@ text.isdigit(){
 # text.replace(str,old,neu) ~ str
 # This replace string to string.
 # 
-# ARGS:
+# Args:
 # - str (str): takes string as arg.
 # - old (str): takes string to replace.
 # - neu (str): takes string to replace with.
@@ -47,7 +47,7 @@ text.len(){
 # text.len.strip(str) ~ int
 # Gives you count of lines in given string.
 # 
-# ARGS:
+# Args:
 # - str (str): takes string as arg.
 text.len.strip(){
   echo "${@}" | wc -l
@@ -56,7 +56,7 @@ text.len.strip(){
 # text.startwith(str,startstr) ~ bool
 # Checks that string startswith given substring or not.
 # 
-# ARGS:
+# Args:
 # - str (str): takes string as arg.
 # - startstr (str): takes substring as arg.
 text.startwith(){
@@ -66,7 +66,7 @@ text.startwith(){
 # text.startwith(str,endstr) ~ bool
 # Checks that string endswith given substring or not.
 # 
-# ARGS:
+# Args:
 # - str (str): takes string as arg.
 # - endstr (str): takes substring as arg.
 text.endswith(){
@@ -76,7 +76,7 @@ text.endswith(){
 # text.contains(str,contain) ~ bool
 # Checks that string contains substring or not.
 # 
-# ARGS:
+# Args:
 # - str (str): takes string as arg.
 # - contain (str): takes charachter.
 text.contains(){
@@ -86,7 +86,7 @@ text.contains(){
 # text.charCount(str,char) ~ int
 # Gives you count of a given character in given string.
 # 
-# ARGS:
+# Args:
 # - str (str): takes string as arg.
 # - char (char): takes charachter.
 text.charCount(){
@@ -96,7 +96,7 @@ text.charCount(){
 # text.replace_charAt(str,pos,char) ~ str
 # Replace character of a string at given pos.
 # 
-# ARGS:
+# Args:
 # - str (str): takes string as arg.
 # - pos (int): takes position.
 # - char (char): takes charachter.

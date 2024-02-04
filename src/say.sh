@@ -40,7 +40,7 @@ say.gencolor(){
 # _say.colorizeString(str,@--gencolor,@--color <color>) ~ str
 # Create and returns you raw colorized strings.
 # 
-# ARGS:
+# Args:
 # - str (str): takes string as arg.
 # - --gencolor (obj,optional): adds colors randomly to syntax.
 # - --color <color> (obj,str,optional): adds given color to syntax.
@@ -119,7 +119,7 @@ say.success(){
 # say.checkStatus(exitCode) ~ str
 # This prints success or failure according to exit code.
 # 
-# ARGS:
+# Args:
 # - exitCode (int): takes exit code.
 say.checkStatus(){
   if [[ "${1}" == 0 ]]; then

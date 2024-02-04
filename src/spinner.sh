@@ -70,7 +70,7 @@ _spinner(){
 # spinner.start(use,subject)
 # Starts spinner to spin.
 # 
-# ARGS:
+# Args:
 # - use (str): takes process (eg: installing, processing).
 # - subject (str): takes subject (eg: file, function).
 # 
